@@ -25,7 +25,7 @@ export class DataService {
       ],
       plans: [
         {
-          name: "Standart",
+          name: "Free",
           price: 0,
           advantages: [
             {
