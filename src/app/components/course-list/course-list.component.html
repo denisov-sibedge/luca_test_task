@@ -1,3 +1,6 @@
-<div *ngFor="let course of courses$ | async">
-  <h3>{{course.name}}</h3>
-</div>
+<ul *ngFor="let course of courses$ | async">
+  <a [routerLink]="['editor', course.id]">
+    <li>{{ course.name }} ({{ course.id }})</li>
+  </a>
+  <a routerLink="editor"><li>+</li></a>
+</ul>
