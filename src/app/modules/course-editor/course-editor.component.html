@@ -1,1 +1,19 @@
-<p>course-editor works!</p>
+<form [formGroup]="courseForm">
+  <label
+    >Name:
+    <input type="text" formControlName="name" />
+  </label>
+  <div formGroupName="author">
+    <label
+      >First Name:
+      <input type="text" formControlName="firstName" />
+    </label>
+    <label
+      >Last Name:
+      <input type="text" formControlName="lastName" />
+    </label>
+  </div>
+</form>
+
+<button (click)="testUpdate()">update</button>
+<pre>{{ this.course | json }}</pre>
