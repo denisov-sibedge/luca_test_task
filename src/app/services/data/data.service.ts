@@ -56,7 +56,16 @@ export class DataService {
   get courses$(): Observable<Course[]> {
     return this._courses$.pipe(map((courses) => Array.from(courses.values())));
   }
-  
+
+  /**
+   * Get existing courses by id
+   * @param {string} id course Id
+   * @returns {Observable<Course | undefined>}
+   */
+  getCoursesById$(id: string): Observable<Course | undefined> {
+    return this._courses$.pipe(map((courses) => courses.get(id)));
+  }
+
   /**
    * Create new course
    * @param {Partial<Course>} data course data
