@@ -8,7 +8,7 @@ import {
 import { ActivatedRoute, Params } from '@angular/router';
 import { Subject } from 'rxjs';
 import { finalize, takeUntil } from 'rxjs/operators';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { Course } from '../../models/course.model';
 import { DataService } from '../../services/data/data.service';
 
@@ -29,6 +29,7 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
       firstName: new FormControl(''),
       lastName: new FormControl(''),
     }),
+    coauthors: new FormArray([]),
   });
 
   constructor(
@@ -36,6 +37,10 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
     private activeRoute: ActivatedRoute,
     private readonly dataService: DataService
   ) {}
+
+  get coauthors(): FormArray {
+    return this.courseForm.get('coauthors') as FormArray;
+  }
 
   ngOnInit(): void {
     this.initFormBehavior();
@@ -65,10 +70,11 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
         })
         .then((data) => {
           console.log('saved', data);
-        }).finally(()=>{
+        })
+        .finally(() => {
           this.loading = false;
           this.cdr.detectChanges();
-      });
+        });
     });
   }
 
@@ -108,6 +114,15 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
       ...this.course,
       name: 'test',
     });
+  }
+
+  addCoauthor(): void {
+    this.coauthors.push(
+      new FormGroup({
+        firstName: new FormControl(''),
+        lastName: new FormControl(''),
+      })
+    );
   }
 
   ngOnDestroy(): void {
