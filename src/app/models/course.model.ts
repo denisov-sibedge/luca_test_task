@@ -5,8 +5,8 @@ import { Duration } from "./duration.model";
 import { Plan } from "./plan.model";
 
 export interface Course {
-    id:string;
-    name:string;
+    id?:string;
+    name:string ;
     description:string;
     contents:ContentsItem[];
     plans:Plan[];

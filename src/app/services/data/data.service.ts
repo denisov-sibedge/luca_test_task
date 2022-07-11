@@ -10,6 +10,22 @@ import { randomString } from 'src/app/utils/random-string.function';
   providedIn: 'root',
 })
 export class DataService {
+  emptyCourse: Course = {
+    name: '',
+    description: '',
+    author: {
+      firstName: '',
+      lastName: '',
+    },
+    contents: [],
+    plans: [],
+    duration: { value: 1, unit: DurationUnit.day },
+    sales: {
+      start: new Date(),
+      end: new Date(),
+    },
+  };
+
   constructor() {
     this.createCourse({
       name: 'Test course #1',
@@ -73,7 +89,7 @@ export class DataService {
    */
   async createCourse(data: Partial<Course>): Promise<string> {
     const id = randomString();
-    this._courses.set(id, <Course>{ ...data, id });
+    this._courses.set(id, <Course>{ ...this.emptyCourse, ...data, id });
     this._courses$.next(this._courses);
     await new Promise((r) => setTimeout(r, Math.random() * 1000 + 1000));
     return id;

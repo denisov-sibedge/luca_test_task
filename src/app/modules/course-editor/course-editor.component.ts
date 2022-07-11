@@ -23,6 +23,7 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
   public course?: Course;
   courseForm = new FormGroup({
     name: new FormControl(''),
+    description: new FormControl(''),
     author: new FormGroup({
       firstName: new FormControl(''),
       lastName: new FormControl(''),
@@ -51,7 +52,7 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
   initFormBehavior(): void {
     this.courseForm.valueChanges.subscribe((data) => {
       console.log('save', data);
-      if (!this.course) {
+      if (!this.course || !this.course.id) {
         return;
       }
       this.dataService.updateCourse(this.course.id, {
@@ -71,7 +72,7 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
           return;
         }
         this.course = data;
-        this.courseForm.setValue(data);
+        this.courseForm.setValue({...data});
         this.cdr.detectChanges();
       });
   }
@@ -82,7 +83,7 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
   }
 
   testUpdate(): void {
-    if (!this.course) {
+    if (!this.course || !this.course.id) {
       return;
     }
     this.dataService.updateCourse(this.course.id, {
