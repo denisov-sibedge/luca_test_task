@@ -8,29 +8,11 @@
     >Description:
     <textarea formControlName="description"></textarea>
   </label>
-  <div formGroupName="author">
-    <label
-      >First Name:
-      <input type="text" formControlName="firstName" />
-    </label>
-    <label
-      >Last Name:
-      <input type="text" formControlName="lastName" />
-    </label>
-  </div>
+  <app-course-editor-author formGroupName="author"></app-course-editor-author>
 
   <ul formArrayName="coauthors">
     <li *ngFor="let coauthor of coauthors.controls; index as i">
-      <div [formGroupName]="i">
-        <label
-          >First Name:
-          <input type="text" formControlName="firstName" />
-        </label>
-        <label
-          >Last Name:
-          <input type="text" formControlName="lastName" />
-        </label>
-      </div>
+        <app-course-editor-author [formGroupName]="i"></app-course-editor-author>
     </li>
     <button (click)="addCoAuthor()">Add Coauthor</button>
   </ul>
@@ -42,21 +24,7 @@
           >Name:
           <input type="text" formControlName="name" />
         </label>
-        <div formGroupName="duration">
-          <label
-            >Duration:
-
-            <input type="number" formControlName="value" />
-            <select formControlName="unit">
-              <option
-                *ngFor="let option of durationOptions"
-                [ngValue]="option.value"
-              >
-                {{ option.label }}
-              </option>
-            </select>
-          </label>
-        </div>
+        <app-course-editor-duration formGroupName="duration"></app-course-editor-duration>
         <label
           >Type:
 

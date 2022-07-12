@@ -1,0 +1,12 @@
+<div *ngIf="formControl">
+  <div [formGroup]="formControl">
+      <label
+        >First Name:
+        <input type="text" formControlName="firstName" />
+      </label>
+      <label
+        >Last Name:
+        <input type="text" formControlName="lastName" />
+      </label>
+  </div>
+</div>

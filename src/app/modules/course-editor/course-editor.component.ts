@@ -41,12 +41,7 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
     { label: 'Lesson', value: ContentsItemType.lesson },
     { label: 'Stream', value: ContentsItemType.stream },
   ];
-  durationOptions = [
-    { label: 'Day', value: DurationUnit.day },
-    { label: 'Hour', value: DurationUnit.hour },
-    { label: 'Week', value: DurationUnit.week },
-    { label: 'Month', value: DurationUnit.month },
-  ];
+
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -119,7 +114,7 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
         }
         this.course = data;
         this.setFormArrays(data);
-        this.courseForm.patchValue({ ...data, contents: [] });
+        this.courseForm.setValue({ ...data, contents: [] });
         this.cdr.detectChanges();
       });
   }
