@@ -36,6 +36,14 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
     }),
     coauthors: new FormArray([]),
     contents: new FormArray([]),
+    sales: new FormGroup({
+      start: new FormControl(),
+      end: new FormControl(),
+    }),
+    duration: new FormGroup({
+      value: new FormControl(),
+      unit: new FormControl(),
+    }),
     plans: new FormArray([]),
   });
 
@@ -59,12 +67,10 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
   }
 
   get plans(): FormArray {
-    console.log(this.courseForm.get('plans'));
     return this.courseForm.get('plans') as FormArray;
   }
 
   advantages(planIndex: number): FormArray {
-    console.log(this.plans.controls[planIndex].get('advantages'))
     return this.plans.controls[planIndex].get('advantages') as FormArray;
   }
 
@@ -114,6 +120,7 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this.componentAlive$),
         finalize(() => {
+          console.log('FIN')
           this.loading = false;
           this.cdr.detectChanges();
         })
@@ -125,8 +132,8 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
         }
         this.course = data;
         this.setFormArrays(data);
-        this.courseForm.setValue({ ...data, contents: [] });
-        this.cdr.detectChanges();
+        this.courseForm.reset();
+        this.courseForm.setValue({ ...data, contents: [], plans: [], coauthors: [] });
       });
   }
 
