@@ -18,6 +18,7 @@
       <input type="text" formControlName="lastName" />
     </label>
   </div>
+
   <ul formArrayName="coauthors">
     <li *ngFor="let coauthor of coauthors.controls; index as i">
       <div [formGroupName]="i">
@@ -31,7 +32,46 @@
         </label>
       </div>
     </li>
-    <button (click)="addCoauthor()">Add Coauthor</button>
+    <button (click)="addCoAuthor()">Add Coauthor</button>
+  </ul>
+
+  <ul formArrayName="contents">
+    <li *ngFor="let content of contents.controls; index as i">
+      <div [formGroupName]="i">
+        <label
+          >Name:
+          <input type="text" formControlName="name" />
+        </label>
+        <div formGroupName="duration">
+          <label
+            >Duration:
+
+            <input type="number" formControlName="value" />
+            <select formControlName="unit">
+              <option
+                *ngFor="let option of durationOptions"
+                [ngValue]="option.value"
+              >
+                {{ option.label }}
+              </option>
+            </select>
+          </label>
+        </div>
+        <label
+          >Type:
+
+          <select formControlName="type">
+            <option
+              *ngFor="let option of contentsOptions"
+              [ngValue]="option.value"
+            >
+              {{ option.label }}
+            </option>
+          </select>
+        </label>
+      </div>
+    </li>
+    <button (click)="addContent()">Add Content</button>
   </ul>
 </form>
 

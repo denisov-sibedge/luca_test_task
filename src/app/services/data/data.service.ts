@@ -17,6 +17,7 @@ export class DataService {
       firstName: '',
       lastName: '',
     },
+    coauthors: [],
     contents: [],
     plans: [],
     duration: { value: 1, unit: DurationUnit.day },
