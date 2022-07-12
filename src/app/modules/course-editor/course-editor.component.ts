@@ -15,6 +15,7 @@ import { ContentsItem } from '../../models/contents-item.model';
 import { Author } from '../../models/author.model';
 import { ContentsItemType } from '../../models/contents-item-type.enum';
 import { DurationUnit } from '../../models/duration-unit.enum';
+import { Plan } from '../../models/plan.model';
 
 @Component({
   selector: 'app-course-editor',
@@ -35,13 +36,13 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
     }),
     coauthors: new FormArray([]),
     contents: new FormArray([]),
+    plans: new FormArray([]),
   });
 
   contentsOptions = [
     { label: 'Lesson', value: ContentsItemType.lesson },
     { label: 'Stream', value: ContentsItemType.stream },
   ];
-
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -55,6 +56,16 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
 
   get contents(): FormArray {
     return this.courseForm.get('contents') as FormArray;
+  }
+
+  get plans(): FormArray {
+    console.log(this.courseForm.get('plans'));
+    return this.courseForm.get('plans') as FormArray;
+  }
+
+  advantages(planIndex: number): FormArray {
+    console.log(this.plans.controls[planIndex].get('advantages'))
+    return this.plans.controls[planIndex].get('advantages') as FormArray;
   }
 
   ngOnInit(): void {
@@ -122,6 +133,7 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
   private setFormArrays(course: Course): void {
     course.contents?.forEach((content) => this.addContent(content));
     course.coauthors?.forEach((coauthor) => this.addCoAuthor(coauthor));
+    course.plans?.forEach((plan) => this.addPlans(plan));
   }
 
   initNewCourse(): void {
@@ -158,8 +170,25 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
         }),
         type: new FormControl(content?.type || ''),
       })
-
     );
+  }
+
+  addPlans(plan?: Plan): void {
+    const advantages = new FormArray([]);
+    plan?.advantages?.forEach((advantage) => {
+      advantages.push(
+        new FormGroup({
+          title: new FormControl(advantage?.title || ''),
+          available: new FormControl(advantage?.available || false),
+        })
+      );
+    });
+    const planGroup = new FormGroup({
+      name: new FormControl(plan?.name || ''),
+      price: new FormControl(plan?.price || 0),
+      advantages,
+    });
+    this.plans.push(planGroup);
   }
 
   ngOnDestroy(): void {

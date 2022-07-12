@@ -12,7 +12,7 @@
 
   <ul formArrayName="coauthors">
     <li *ngFor="let coauthor of coauthors.controls; index as i">
-        <app-course-editor-author [formGroupName]="i"></app-course-editor-author>
+      <app-course-editor-author [formGroupName]="i"></app-course-editor-author>
     </li>
     <button (click)="addCoAuthor()">Add Coauthor</button>
   </ul>
@@ -24,7 +24,9 @@
           >Name:
           <input type="text" formControlName="name" />
         </label>
-        <app-course-editor-duration formGroupName="duration"></app-course-editor-duration>
+        <app-course-editor-duration
+          formGroupName="duration"
+        ></app-course-editor-duration>
         <label
           >Type:
 
@@ -37,6 +39,36 @@
             </option>
           </select>
         </label>
+      </div>
+    </li>
+    <button (click)="addContent()">Add Content</button>
+  </ul>
+  <ul formArrayName="plans">
+    <li *ngFor="let plan of plans.controls; index as i">
+      <div [formGroupName]="i">
+        <label
+          >Name:
+          <input type="text" formControlName="name" />
+        </label>
+        <label
+          >Price:
+          <input type="text" formControlName="price" />
+        </label>
+        <ul formArrayName="advantages">
+          <li *ngFor="let advantage of advantages(i).controls; index as j">
+            <div [formGroupName]="j">
+                <label
+                >Title:
+                <input type="text" formControlName="title" />
+              </label>
+              <label
+                >Available:
+                <input type="checkbox" formControlName="available" />
+              </label>
+
+            </div>
+          </li>
+        </ul>
       </div>
     </li>
     <button (click)="addContent()">Add Content</button>
