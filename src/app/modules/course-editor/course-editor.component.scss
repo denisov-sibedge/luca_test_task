@@ -8,17 +8,19 @@
     padding: 2px 5px;
     color: darkslategray;
     font-size: 10px;
-    &>span{
+    & > span {
       font-weight: bold;
       color: black;
       font-size: 16px;
     }
   }
   & label {
+    display: inline-block;
     color: darkslategray;
     text-align: left;
     font-size: 12px;
     line-height: 1.75;
+    vertical-align: top;
     font-family: Nunito, sans-serif;
     & > * {
       display: block;
@@ -27,33 +29,44 @@
   & input:not([type="checkbox"]),
   & select,
   & textarea {
-    height: 30px;
+    min-height: 30px;
     padding: 0 10px;
-    margin: 0 10px;
+    margin: 0 10px 0 0;
     border: 1px solid lightgray;
     background-color: whitesmoke;
     font-family: Nunito, sans-serif;
-    &:focus {
-      border-color: #2563eb;
-    }
   }
-
-  & li {
-    max-width: 600px;
+  & textarea {
+    min-height: 50px;
+    padding: 5px;
+  }
+  & .primary-btn {
+    background-color: forestgreen;
     border-radius: 3px;
-    box-shadow: -1px -1px 10px 2px lightgrey;
-    list-style-type: none;
-    margin: 16px 0;
+    color: white;
+    border: none;
     padding: 10px;
-    position: relative;
-    & .remove-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      color: darkred;
-      background: none;
-      border: none;
-      cursor: pointer;
+    margin: 10px 0;
+  }
+  & ul {
+    padding-inline-start: 10px;
+    & li {
+      max-width: 600px;
+      border-radius: 3px;
+      box-shadow: -1px -1px 10px 2px lightgrey;
+      list-style-type: none;
+      margin: 16px 0;
+      padding: 10px;
+      position: relative;
+      & .remove-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        color: darkred;
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
     }
   }
 

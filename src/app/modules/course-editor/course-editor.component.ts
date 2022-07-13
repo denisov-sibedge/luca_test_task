@@ -20,7 +20,6 @@ import { DataService } from '../../services/data/data.service';
 import { ContentsItem } from '../../models/contents-item.model';
 import { Author } from '../../models/author.model';
 import { ContentsItemType } from '../../models/contents-item-type.enum';
-import { DurationUnit } from '../../models/duration-unit.enum';
 import { Plan } from '../../models/plan.model';
 import { PlanAdvantage } from '../../models/plan-advantage.model';
 

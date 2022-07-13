@@ -3,14 +3,16 @@
   course ID:<span>{{ course?.id }}</span>
 </div>
 <form [formGroup]="courseForm">
-  <label
-    >Name:
-    <input type="text" formControlName="name" />
-  </label>
-  <label
-    >Description:
-    <textarea formControlName="description"></textarea>
-  </label>
+  <div>
+    <label
+      >Name:
+      <input type="text" formControlName="name" />
+    </label>
+    <label
+      >Description:
+      <textarea formControlName="description"></textarea>
+    </label>
+  </div>
   <app-course-editor-author formGroupName="author"></app-course-editor-author>
 
   <ul formArrayName="coauthors">
@@ -44,7 +46,7 @@
           </select>
         </label>
       </div>
-       <button class="remove-btn" (click)="removeContent(i)">✖</button>
+      <button class="remove-btn" (click)="removeContent(i)">✖</button>
     </li>
     <button (click)="addContent()">Add Content</button>
   </ul>
@@ -71,7 +73,9 @@
                 <input type="checkbox" formControlName="available" />
               </label>
             </div>
-            <button class="remove-btn" (click)="removeAdvantages(i, j)">✖</button>
+            <button class="remove-btn" (click)="removeAdvantages(i, j)">
+              ✖
+            </button>
           </li>
           <button (click)="addAdvantages(i)">Add advantage</button>
         </ul>
@@ -96,4 +100,4 @@
     </label>
   </div>
 </form>
-<button routerLink="" [disabled]="loading">Done</button>
+<button class="primary-btn" routerLink="" [disabled]="loading">Done</button>

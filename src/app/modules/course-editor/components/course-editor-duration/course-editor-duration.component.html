@@ -3,7 +3,7 @@
     <label
       >Duration:
       <div>
-        <input type="number" formControlName="value" />
+        <input type="number" min="0" formControlName="value" />
         <select formControlName="unit">
           <option
             *ngFor="let option of durationOptions"
