@@ -77,10 +77,10 @@ export class DataService {
   /**
    * Get existing courses by id
    * @param {string} id course Id
-   * @returns {Observable<Course | undefined>}
+   * @returns {Course | undefined}
    */
-  getCoursesById$(id: string): Observable<Course | undefined> {
-    return this._courses$.pipe(map((courses) => courses.get(id)));
+  getCoursesById(id: string): Course | undefined {
+    return this._courses.get(id);
   }
 
   /**

@@ -5,9 +5,15 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { finalize, skip, skipWhile, takeUntil } from 'rxjs/operators';
+import {
+  debounceTime,
+  finalize,
+  skip,
+  skipWhile,
+  takeUntil,
+} from 'rxjs/operators';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { Course } from '../../models/course.model';
 import { DataService } from '../../services/data/data.service';
@@ -16,6 +22,7 @@ import { Author } from '../../models/author.model';
 import { ContentsItemType } from '../../models/contents-item-type.enum';
 import { DurationUnit } from '../../models/duration-unit.enum';
 import { Plan } from '../../models/plan.model';
+import { PlanAdvantage } from '../../models/plan-advantage.model';
 
 @Component({
   selector: 'app-course-editor',
@@ -28,6 +35,7 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
   public loading = false;
   public course?: Course;
   public courseForm = new FormGroup({
+    id: new FormControl(''),
     name: new FormControl(''),
     description: new FormControl(''),
     author: new FormGroup({
@@ -55,6 +63,7 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
   constructor(
     private cdr: ChangeDetectorRef,
     private activeRoute: ActivatedRoute,
+    private router: Router,
     private readonly dataService: DataService
   ) {}
 
@@ -75,7 +84,6 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.initFormBehavior();
     this.activeRoute.params
       .pipe(takeUntil(this.componentAlive$))
       .subscribe((params: Params) => {
@@ -84,78 +92,66 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
         } else {
           this.loadForm(params.id);
         }
+        this.initFormBehavior();
       });
   }
 
   initFormBehavior(): void {
-    this.courseForm.valueChanges
-      .pipe(skipWhile(() => this.loading))
-      .subscribe((data) => {
-        console.log('save', data);
-        this.loading = true;
-        this.cdr.detectChanges();
-        if (!this.course || !this.course.id) {
-          return;
-        }
-        this.dataService
-          .updateCourse(this.course.id, {
-            ...this.course,
-            ...data,
-          })
-          .then((data) => {
-            console.log('saved', data);
-          })
-          .finally(() => {
-            this.loading = false;
-            this.cdr.detectChanges();
-          });
-      });
+    this.courseForm.valueChanges.pipe(debounceTime(200)).subscribe((data) => {
+      this.loading = true;
+      this.cdr.detectChanges();
+      if (!this.course || !this.course.id) {
+        return;
+      }
+      this.dataService
+        .updateCourse(this.course.id, {
+          ...this.course,
+          ...data,
+        })
+        .then((data) => {
+          console.log('saved >> ', data);
+        })
+        .finally(() => {
+          this.loading = false;
+          this.cdr.detectChanges();
+        });
+    });
   }
 
   loadForm(courseId: string) {
-    this.loading = true;
+    this.course = this.dataService.getCoursesById(courseId);
+    if (!this.course) {
+      this.initNewCourse();
+      return;
+    }
+    this.setFormArrays(this.course);
+
+    this.courseForm.patchValue(
+      { ...this.course, contents: [], plans: [], coauthors: [] },
+      { onlySelf: true, emitEvent: true }
+    );
     this.cdr.detectChanges();
-    this.dataService
-      .getCoursesById$(courseId)
-      .pipe(
-        takeUntil(this.componentAlive$),
-        finalize(() => {
-          console.log('FIN')
-          this.loading = false;
-          this.cdr.detectChanges();
-        })
-      )
-      .subscribe((data: Course | undefined) => {
-        if (!data) {
-          this.initNewCourse();
-          return;
-        }
-        this.course = data;
-        this.setFormArrays(data);
-        this.courseForm.reset();
-        this.courseForm.setValue({ ...data, contents: [], plans: [], coauthors: [] });
-      });
   }
 
   private setFormArrays(course: Course): void {
+    this.contents.clear({ emitEvent: false });
+    this.coauthors.clear({ emitEvent: false });
+    this.plans.clear({ emitEvent: false });
     course.contents?.forEach((content) => this.addContent(content));
     course.coauthors?.forEach((coauthor) => this.addCoAuthor(coauthor));
     course.plans?.forEach((plan) => this.addPlans(plan));
   }
 
   initNewCourse(): void {
-    //TODO: add new
-    console.log('Need init new');
-  }
-
-  testUpdate(): void {
-    if (!this.course || !this.course.id) {
-      return;
-    }
-    this.dataService.updateCourse(this.course.id, {
-      ...this.course,
-      name: 'test',
-    });
+    this.dataService
+      .createCourse({})
+      .then((data) => {
+        this.router.navigate(['editor', data]);
+      })
+      .finally(() => {
+        this.loading = false;
+        this.cdr.detectChanges();
+      });
   }
 
   addCoAuthor(author?: Author): void {
@@ -165,6 +161,9 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
         lastName: new FormControl(author?.lastName || ''),
       })
     );
+  }
+  removeCoAuthor(coAuthorIndex: number): void {
+    this.coauthors.removeAt(coAuthorIndex);
   }
 
   addContent(content?: ContentsItem): void {
@@ -178,6 +177,27 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
         type: new FormControl(content?.type || ''),
       })
     );
+  }
+  removeContent(contentIndex: number): void {
+    this.contents.removeAt(contentIndex);
+  }
+
+  addAdvantages(planIndex: number, plan?: PlanAdvantage): void {
+    (
+      (this.plans.controls[planIndex] as FormGroup).controls
+        .advantages as FormArray
+    ).push(
+      new FormGroup({
+        title: new FormControl(''),
+        available: new FormControl(false),
+      })
+    );
+  }
+  removeAdvantages(planIndex: number, advantagesIndex: number): void {
+    (
+      (this.plans.controls[planIndex] as FormGroup).controls
+        .advantages as FormArray
+    ).removeAt(advantagesIndex);
   }
 
   addPlans(plan?: Plan): void {
@@ -196,6 +216,10 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
       advantages,
     });
     this.plans.push(planGroup);
+  }
+
+  removePlans(planIndex: number): void {
+    this.plans.removeAt(planIndex);
   }
 
   ngOnDestroy(): void {

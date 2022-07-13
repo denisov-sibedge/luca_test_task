@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CourseEditorAuthorComponent } from './components/course-editor-author/course-editor-author.component';
 import { CourseEditorDurationComponent } from './components/course-editor-duration/course-editor-duration.component';
+import { DateInputConverterDirective } from '../../directives/date-input-converter.directive';
 
 const routes: Routes = [
   {
@@ -18,7 +19,12 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [CourseEditorComponent, CourseEditorAuthorComponent, CourseEditorDurationComponent],
+  declarations: [
+    CourseEditorComponent,
+    CourseEditorAuthorComponent,
+    CourseEditorDurationComponent,
+    DateInputConverterDirective,
+  ],
   imports: [CommonModule, RouterModule.forChild(routes), ReactiveFormsModule],
 })
 export class CourseEditorModule {}
