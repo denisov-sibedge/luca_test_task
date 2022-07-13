@@ -83,12 +83,14 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.courseForm.disable();
     this.activeRoute.params
       .pipe(takeUntil(this.componentAlive$))
       .subscribe((params: Params) => {
         if (!params.id) {
           this.initNewCourse();
         } else {
+          this.courseForm.enable();
           this.loadForm(params.id);
         }
         this.initFormBehavior();
@@ -142,12 +144,15 @@ export class CourseEditorComponent implements OnInit, OnDestroy {
   }
 
   initNewCourse(): void {
+    this.loading = true;
+    this.cdr.detectChanges();
     this.dataService
       .createCourse({})
       .then((data) => {
         this.router.navigate(['editor', data]);
       })
       .finally(() => {
+        this.courseForm.enable();
         this.loading = false;
         this.cdr.detectChanges();
       });
