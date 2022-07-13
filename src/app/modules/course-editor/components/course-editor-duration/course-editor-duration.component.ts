@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ControlContainer, FormGroup } from '@angular/forms';
-import { DurationUnit } from '../../../../models/duration-unit.enum';
+import { DurationUnit } from '@models/duration-unit.enum';
 
 @Component({
   selector: 'app-course-editor-duration',

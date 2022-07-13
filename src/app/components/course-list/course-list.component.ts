@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from '../../services/data/data.service';
+import { DataService } from '@services/data/data.service';
 import { Observable } from 'rxjs';
-import { Course } from '../../models/course.model';
+import { Course } from '@models/course.model';
 
 @Component({
   selector: 'app-course-list',

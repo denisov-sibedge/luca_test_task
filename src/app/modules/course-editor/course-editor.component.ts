@@ -7,21 +7,15 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import {
-  debounceTime,
-  finalize,
-  skip,
-  skipWhile,
-  takeUntil,
-} from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
-import { Course } from '../../models/course.model';
-import { DataService } from '../../services/data/data.service';
-import { ContentsItem } from '../../models/contents-item.model';
-import { Author } from '../../models/author.model';
-import { ContentsItemType } from '../../models/contents-item-type.enum';
-import { Plan } from '../../models/plan.model';
-import { PlanAdvantage } from '../../models/plan-advantage.model';
+import { Course } from '@models/course.model';
+import { DataService } from '@services/data/data.service';
+import { ContentsItem } from '@models/contents-item.model';
+import { Author } from '@models/author.model';
+import { ContentsItemType } from '@models/contents-item-type.enum';
+import { Plan } from '@models/plan.model';
+import { PlanAdvantage } from '@models/plan-advantage.model';
 
 @Component({
   selector: 'app-course-editor',
