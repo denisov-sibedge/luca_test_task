@@ -1,5 +1,5 @@
-<span *ngIf="loading">loading...</span>
-<div *ngIf="course?.id">
+<div *ngIf="loading" class="loader-circle"><div></div></div>
+<div *ngIf="course?.id" class="course-id">
   course ID:<span>{{ course?.id }}</span>
 </div>
 <form [formGroup]="courseForm">
@@ -16,7 +16,7 @@
   <ul formArrayName="coauthors">
     <li *ngFor="let coauthor of coauthors.controls; index as i">
       <app-course-editor-author [formGroupName]="i"></app-course-editor-author>
-      <button (click)="removeCoAuthor(i)">✖</button>
+      <button class="remove-btn" (click)="removeCoAuthor(i)">✖</button>
     </li>
     <button (click)="addCoAuthor()">Add Coauthor</button>
   </ul>
@@ -44,7 +44,7 @@
           </select>
         </label>
       </div>
-       <button (click)="removeContent(i)">✖</button>
+       <button class="remove-btn" (click)="removeContent(i)">✖</button>
     </li>
     <button (click)="addContent()">Add Content</button>
   </ul>
@@ -71,12 +71,12 @@
                 <input type="checkbox" formControlName="available" />
               </label>
             </div>
-            <button (click)="removeAdvantages(i, j)">✖</button>
+            <button class="remove-btn" (click)="removeAdvantages(i, j)">✖</button>
           </li>
           <button (click)="addAdvantages(i)">Add advantage</button>
         </ul>
       </div>
-      <button (click)="removePlans(i)">✖</button>
+      <button class="remove-btn" (click)="removePlans(i)">✖</button>
     </li>
     <button (click)="addPlans()">Add plan</button>
   </ul>

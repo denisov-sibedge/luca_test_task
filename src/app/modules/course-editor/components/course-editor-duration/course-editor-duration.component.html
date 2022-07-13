@@ -2,12 +2,17 @@
   <div [formGroup]="formControl">
     <label
       >Duration:
-      <input type="number" formControlName="value" />
-      <select formControlName="unit">
-        <option *ngFor="let option of durationOptions" [ngValue]="option.value">
-          {{ option.label }}
-        </option>
-      </select>
+      <div>
+        <input type="number" formControlName="value" />
+        <select formControlName="unit">
+          <option
+            *ngFor="let option of durationOptions"
+            [ngValue]="option.value"
+          >
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
     </label>
   </div>
 </div>
